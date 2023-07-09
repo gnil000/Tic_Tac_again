@@ -8,16 +8,17 @@ namespace Tic_Tac_again.Models
 
         [JsonIgnore]
         public Client? Opponent { get; set; }
-        [JsonIgnore]
-        public bool isPlaying { get; set; }
+        //[JsonIgnore]
+        //public bool isPlaying { get; set; }
         [JsonIgnore]
         public bool WaitMove { get; set; }
-        [JsonIgnore]
-        public int Marker { get; set; }// 0 - X | 1 - O
+        //[JsonIgnore]
+        public int Marker { get; private set; }// 0 - X | 1 - O
 
         public int ConnId { get; }
 
         public int isWin { get; private set; }//-1 - isDraw | 0 - lose | 1 - win | -2 - nothing
+        public bool isPlaying { get; private set; }
 
         public Client(string name)
         {
@@ -30,6 +31,14 @@ namespace Tic_Tac_again.Models
         public void SetIsWin(int x)
         {
             isWin = x;
+        }
+
+        public void SetIsPlaying(bool x) { 
+            isPlaying = x;
+        }
+
+        public void SetMarker(int x) {
+            Marker = x;
         }
 
     }

@@ -4,24 +4,27 @@
     {
         public int Id { get; set; }
 
-        public bool isGameOver = false;
-        public bool IsDraw = false;
+        public bool isGameOver { get; set; }
+        public bool IsDraw { get; set; }
 
         public Client Client1 { get; set; }
         public Client Client2 { get; set; }
 
-        public int[] field = new int[9];
+        public int[] field { get; set; }
         //-1 - cell is empty
         //0 - player1
         //1 - player2
 
-        int moves = 9;
+        private int moves;
 
         public TicTacToe()
         {
+            moves = 9;
+            field = new int[9];
             for(int i = 0; i < 9; i++)
                 field[i] = -1;
             isGameOver = false;
+            IsDraw = false;
             Id = DataSource.GetInstance()._games.Count + 1;
         }
 

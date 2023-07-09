@@ -46,19 +46,20 @@ namespace Tic_Tac_again.Models
             if (random.Next(0, 1) == 0)
             {
                 client.WaitMove = false;
-                client.Marker = 0;
+                client.SetMarker(0);
                 opponent.WaitMove = true;
-                opponent.Marker = 1;
+                opponent.SetMarker(1);
             }
             else
             {
                 client.WaitMove = true;
-                client.Marker = 1;
+                client.SetMarker(1);
                 opponent.WaitMove = false;
-                opponent.Marker = 0;
+                opponent.SetMarker(0);
             }
-            
 
+            client.SetIsPlaying(true);
+            opponent.SetIsPlaying(true);
 
             client.Opponent = opponent;
             opponent.Opponent = client;
@@ -79,7 +80,7 @@ namespace Tic_Tac_again.Models
             {
                 game.Client1.SetIsWin(-1);
                 game.Client2.SetIsWin(-1);
-                _games.RemoveGame(game);
+                //_games.RemoveGame(game);
                 return false;
             }
 
@@ -89,11 +90,11 @@ namespace Tic_Tac_again.Models
                 {
                     game.Client1.SetIsWin(1);
                     game.Client2.SetIsWin(0);
-                    _games.RemoveGame(game);
+                    //_games.RemoveGame(game);
                     return false;
                 }
-                game.Client1.WaitMove = true;
-                game.Client2.WaitMove = false;
+               // game.Client1.WaitMove = true;
+               // game.Client2.WaitMove = false;
 
             }
             else if(game.Client2.WaitMove == false)
@@ -102,11 +103,11 @@ namespace Tic_Tac_again.Models
                 {
                     game.Client2.SetIsWin(1);
                     game.Client1.SetIsWin(0);
-                    _games.RemoveGame(game);
+                    //_games.RemoveGame(game);
                     return false;
                 }
-                game.Client1.WaitMove = false;
-                game.Client2.WaitMove = true;
+                //game.Client1.WaitMove = false;
+                //game.Client2.WaitMove = true;
             }
 
             if (!game.isGameOver)
