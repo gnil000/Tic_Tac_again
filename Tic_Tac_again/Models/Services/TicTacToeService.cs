@@ -3,13 +3,13 @@
     public class TicTacToeService
     {
 
-        public async Task<TicTacToe> AddGame(TicTacToe game)
+        public TicTacToe AddGame(TicTacToe game)
         {
             DataSource.GetInstance()._games.Add(game);
-            return await Task.FromResult(game);
+            return game;
         }
 
-        public async Task<TicTacToe?> GetGame(int id)
+        public TicTacToe? GetGame(int id)
         {
             return DataSource.GetInstance()._games.FirstOrDefault(x => x.Client1.ConnId == id || x.Client2.ConnId==id);
         }

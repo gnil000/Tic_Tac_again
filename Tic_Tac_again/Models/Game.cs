@@ -5,30 +5,11 @@ namespace Tic_Tac_again.Models
 {
     public static class Game
     {
-        //private List<TicTacToe> games = new List<TicTacToe>();
 
-        //public static List<Client> clients = new List<Client>();
-
-        
-
-        //TicTacToeService _games;
-        //ClientService _clients;
-
-        //Game(TicTacToeService context, ClientService clients)
-        //{
-        //    _games = context;
-        //    _clients = clients;
-        //}
-
-        //public static async Task<bool> StartGame(int id)
-        //{
-        //    return await FindOpponent(id);
-        //}
-
-        public static async Task<bool> FindOpponent(ClientService _clients, TicTacToeService _games, int id)
+        public static bool FindOpponent(ClientService _clients, TicTacToeService _games, int id)
         {
             Random random = new Random();
-            var client = _clients.GetClient(id).Result;
+            var client = _clients.GetClient(id);
 
             if (client == null)
                 return false;
@@ -50,7 +31,7 @@ namespace Tic_Tac_again.Models
             object locker = new();
 
             lock (locker) {
-                if (_games.GetGame(id).Result == null)
+                if (_games.GetGame(id) == null)
                 {
                     if (random.Next(0, 2) == 0)
                     {
@@ -82,11 +63,11 @@ namespace Tic_Tac_again.Models
         }
 
 
-        public static async Task<bool> Play(ClientService _clients, TicTacToeService _games, int clientId, int position)
+        public static bool Play(ClientService _clients, TicTacToeService _games, int clientId, int position)
         {
             var game = _games.GetGames().Result.FirstOrDefault(x => x.Client1.ConnId == clientId || x.Client2.ConnId == clientId);
 
-            var player = _clients.GetClient(clientId).Result;
+            var player = _clients.GetClient(clientId);
 
             if (game.isGameOver && game.IsDraw)
             {
@@ -102,6 +83,7 @@ namespace Tic_Tac_again.Models
                 {
                     game.Client1.SetIsWin(1);
                     game.Client2.SetIsWin(0);
+                    game.WinClient1 += 1;
                     //_games.RemoveGame(game);
                     return false;
                 }
@@ -112,6 +94,7 @@ namespace Tic_Tac_again.Models
                 {
                     game.Client2.SetIsWin(1);
                     game.Client1.SetIsWin(0);
+                    game.WinClient2 += 1;
                     //_games.RemoveGame(game);
                     return false;
                 }
@@ -128,6 +111,24 @@ namespace Tic_Tac_again.Models
 
             return true;
         }
+
+        public static void PlayerDisconnected(ClientService _clients, TicTacToeService _games, int id)
+        {
+            var game = _games.GetGame(id);
+            if(game != null)
+                _games.RemoveGame(game);
+            var client = _clients.GetClient(id);
+            if (client != null)
+            {
+                _clients.RemoveClient(client);
+                if (client.Opponent != null)
+                {
+                    client.Opponent.Opponent = null;
+                    client.Opponent.SetIsPlaying(false);
+                }
+            }
+        }
+
 
 
     }

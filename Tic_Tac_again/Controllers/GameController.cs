@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using System.Text.Json;
 using Tic_Tac_again.Models;
 using Tic_Tac_again.Models.Services;
 
@@ -21,19 +19,19 @@ namespace Tic_Tac_again.Controllers
 
 
         [HttpGet]
-        public async Task<TicTacToe> GetGame(int id)
+        public TicTacToe? GetGame(int id)
         {
-            return await _tictactoeContext.GetGame(id);
+            return _tictactoeContext.GetGame(id);
 
         }
 
 
         [HttpGet]
         [Route("GetField")]
-        public async Task<GameStateStruct> GetField(int id)
+        public GameStateStruct GetField(int id)
         { //id client 
-            var tictac = _tictactoeContext.GetGame(id).Result;
-            return await Task.FromResult(new GameStateStruct(tictac, id));
+            var tictac = _tictactoeContext.GetGame(id);
+            return new GameStateStruct(tictac, id);
         }
 
 
@@ -49,14 +47,10 @@ namespace Tic_Tac_again.Controllers
         [HttpPost]
         [Route("StartGame")]
         //public async Task<ActionResult<Client>> StartGame(int id)
-        public async Task<Client?> StartGame(int id)
+        public Client? StartGame(int id)
         {
-            //bool result = await Game.FindOpponent(_clientContext, _tictactoeContext, id);
-            //if(result)
-            //    return Ok(result);
-            //return BadRequest(result);
-            await Game.FindOpponent(_clientContext, _tictactoeContext, id);
-            return _clientContext.GetClient(id).Result;
+            Game.FindOpponent(_clientContext, _tictactoeContext, id);
+            return _clientContext.GetClient(id);
         }
 
         //[HttpPost]
@@ -75,7 +69,6 @@ namespace Tic_Tac_again.Controllers
         //}
 
 
-
         //[HttpPost]
         //[Route("StartGame")]
         //public async Task<bool> StartGame([FromBody] int id)
@@ -85,12 +78,17 @@ namespace Tic_Tac_again.Controllers
 
         [HttpPost]
         [Route("SendPosition")]
-        public async Task<bool> SendPosition(int id, int position)
+        public bool SendPosition(int id, int position)
         {
-            
-            return await Game.Play(_clientContext, _tictactoeContext, id, position);
+            return Game.Play(_clientContext, _tictactoeContext, id, position);
         }
 
+        [HttpPost]
+        [Route("Disconnected")]
+        public void Desconnected(int id)
+        {
+            Game.PlayerDisconnected(_clientContext, _tictactoeContext, id);
+        }
 
 
     }

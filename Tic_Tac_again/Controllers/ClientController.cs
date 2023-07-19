@@ -25,7 +25,7 @@ namespace Tic_Tac_again.Controllers
         [HttpGet ("{id}")]
         public async Task<ActionResult<Client>> Client(int id)
         {
-            var client =  await _context.GetClient(id);
+            var client =  _context.GetClient(id);
             if (client == null)
                 return NotFound();
             return await Task.FromResult(client);

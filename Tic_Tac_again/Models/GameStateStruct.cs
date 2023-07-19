@@ -5,6 +5,9 @@
         public int Id { get; set; }
 
         public string opponentName { get; set; }
+
+        public int YouWin { get; set; }
+        public int OpponentWin { get; set; }
         //public string client2Name { get; set; }
 
         public int isWin { get; set; }
@@ -18,18 +21,14 @@
         {
             Id = tt.Id;
             opponentName = id != tt.Client1.ConnId ? tt.Client1.Name : tt.Client2.Name;
-            //client2Name = tt.Client2.Name;
             isWin = id == tt.Client1.ConnId ? tt.Client1.isWin : tt.Client2.isWin;
-
-            //if (tt.Client2.ConnId == id)
-            //    isWin = tt.Client2.isWin;
-            //else
-            //    isWin = tt.Client1.isWin;
 
             isGameOver = tt.isGameOver;
             isDraw = tt.IsDraw;
             field = tt.field;
 
+            YouWin = id == tt.Client1.ConnId ? tt.WinClient1 : tt.WinClient2;
+            OpponentWin = id != tt.Client1.ConnId ? tt.WinClient1 : tt.WinClient2;
         }
 
     }

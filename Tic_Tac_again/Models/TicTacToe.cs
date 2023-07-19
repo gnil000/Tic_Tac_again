@@ -7,6 +7,9 @@
         public bool isGameOver { get; set; }
         public bool IsDraw { get; set; }
 
+        public int WinClient1 { get; set; }
+        public int WinClient2 { get; set; }
+
         public Client Client1 { get; set; }
         public Client Client2 { get; set; }
 
@@ -17,6 +20,7 @@
 
         private int moves;
 
+
         public TicTacToe()
         {
             moves = 9;
@@ -25,6 +29,8 @@
                 field[i] = -1;
             isGameOver = false;
             IsDraw = false;
+            WinClient1 = 0;
+            WinClient2 = 0;
             Id = DataSource.GetInstance()._games.Count + 1;
         }
 
