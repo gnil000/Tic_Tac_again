@@ -28,44 +28,56 @@ namespace Tic_Tac_again.Models
         public static async Task<bool> FindOpponent(ClientService _clients, TicTacToeService _games, int id)
         {
             Random random = new Random();
-            //Debug.WriteLine($"{_clients.GetClients().Result.Count}");
             var client = _clients.GetClient(id).Result;
-           // Debug.WriteLine($"CLIENTS IS EMPTY: {client.Name}");
+
             if (client == null)
-            {
-                //client = new Client();
-                //clients.Add(client);
-                return false;
-            }
-
-            var opponent = _clients.GetClients().Result.Where(x => x.isPlaying == false && x != client).FirstOrDefault();
-            
-            if(opponent == null)
                 return false;
 
-            if (random.Next(0, 1) == 0)
-            {
-                client.WaitMove = false;
-                client.SetMarker(0);
-                opponent.WaitMove = true;
-                opponent.SetMarker(1);
+            client.SetSearchGame(true);
+            int i = 0;
+            Client? opponent = null;
+            while (opponent == null) {
+                opponent = _clients.GetClients().Result.Where(x => x.isPlaying == false && x.isSearchGame == true && x != client).FirstOrDefault();
+                Task.Delay(1000).Wait();
+                if (i++ == 10)
+                {
+                    client.SetSearchGame(false);
+                    return false;
+                }
             }
-            else
-            {
-                client.WaitMove = true;
-                client.SetMarker(1);
-                opponent.WaitMove = false;
-                opponent.SetMarker(0);
+            client.SetSearchGame(false);
+
+            object locker = new();
+
+            lock (locker) {
+                if (_games.GetGame(id).Result == null)
+                {
+                    if (random.Next(0, 2) == 0)
+                    {
+                        client.WaitMove = false;
+                        client.SetMarker(0);
+                        opponent.WaitMove = true;
+                        opponent.SetMarker(1);
+                    }
+                    else
+                    {
+                        client.WaitMove = true;
+                        client.SetMarker(1);
+                        opponent.WaitMove = false;
+                        opponent.SetMarker(0);
+                    }
+
+                    client.SetIsPlaying(true);
+                    opponent.SetIsPlaying(true);
+
+                    client.Opponent = opponent;
+                    opponent.Opponent = client;
+
+                    _games.AddGame(new TicTacToe { Client1 = client, Client2 = opponent });
+                }
+                else
+                    return true;
             }
-
-            client.SetIsPlaying(true);
-            opponent.SetIsPlaying(true);
-
-            client.Opponent = opponent;
-            opponent.Opponent = client;
-
-
-            await _games.AddGame(new TicTacToe { Client1 = client, Client2 = opponent});
             return true;
         }
 
@@ -93,9 +105,6 @@ namespace Tic_Tac_again.Models
                     //_games.RemoveGame(game);
                     return false;
                 }
-               // game.Client1.WaitMove = true;
-               // game.Client2.WaitMove = false;
-
             }
             else if(game.Client2.WaitMove == false)
             {
@@ -106,8 +115,6 @@ namespace Tic_Tac_again.Models
                     //_games.RemoveGame(game);
                     return false;
                 }
-                //game.Client1.WaitMove = false;
-                //game.Client2.WaitMove = true;
             }
 
             if (!game.isGameOver)
@@ -118,8 +125,6 @@ namespace Tic_Tac_again.Models
 
             _games.UpdateTicTacToeState(game);
             //_clients.UpdateClientState(player);
-
-           
 
             return true;
         }

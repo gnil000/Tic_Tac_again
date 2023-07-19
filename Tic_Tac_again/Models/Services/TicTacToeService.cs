@@ -9,9 +9,9 @@
             return await Task.FromResult(game);
         }
 
-        public async Task<TicTacToe> GetGame(int id)
+        public async Task<TicTacToe?> GetGame(int id)
         {
-            return await Task.FromResult(DataSource.GetInstance()._games.First(x => x.Client1.ConnId == id || x.Client2.ConnId==id));
+            return DataSource.GetInstance()._games.FirstOrDefault(x => x.Client1.ConnId == id || x.Client2.ConnId==id);
         }
 
         public async Task<List<TicTacToe>> GetGames() {

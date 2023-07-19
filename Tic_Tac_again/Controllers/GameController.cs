@@ -48,15 +48,24 @@ namespace Tic_Tac_again.Controllers
 
         [HttpPost]
         [Route("StartGame")]
-        public async Task<ActionResult<Client>> StartGame(int id)
+        //public async Task<ActionResult<Client>> StartGame(int id)
+        public async Task<Client?> StartGame(int id)
         {
             //bool result = await Game.FindOpponent(_clientContext, _tictactoeContext, id);
             //if(result)
             //    return Ok(result);
             //return BadRequest(result);
             await Game.FindOpponent(_clientContext, _tictactoeContext, id);
-            return await Task.FromResult(_clientContext.GetClient(id).Result);
+            return _clientContext.GetClient(id).Result;
         }
+
+        //[HttpPost]
+        //[Route("StartGame")]
+        //public async Task<bool> StartGame(int id)
+        //{
+        //    return await Game.FindOpponent(_clientContext, _tictactoeContext, id);
+        //}
+
 
         //[HttpPost]
         //[Route("SendPosition")]

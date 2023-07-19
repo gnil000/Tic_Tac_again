@@ -19,6 +19,7 @@ namespace Tic_Tac_again.Models
 
         public int isWin { get; private set; }//-1 - isDraw | 0 - lose | 1 - win | -2 - nothing
         public bool isPlaying { get; private set; }
+        public bool isSearchGame { get; private set; } 
 
         public Client(string name)
         {
@@ -26,6 +27,7 @@ namespace Tic_Tac_again.Models
             isPlaying = false;
             ConnId = DataSource.GetInstance()._clients.Count+1;
             isWin = -2;
+            isSearchGame = false;
         } 
 
         public void SetIsWin(int x)
@@ -39,6 +41,11 @@ namespace Tic_Tac_again.Models
 
         public void SetMarker(int x) {
             Marker = x;
+        }
+
+        public void SetSearchGame(bool x)
+        {
+            isSearchGame = x;
         }
 
     }
