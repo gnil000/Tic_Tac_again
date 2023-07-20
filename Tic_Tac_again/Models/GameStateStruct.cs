@@ -15,6 +15,8 @@
         public bool isGameOver { get; set; }
         public bool isDraw { get; set; }
 
+        public bool WaitMove { get; set; }
+
         public int[] field { get; set; }
 
         public GameStateStruct(TicTacToe tt, int id)
@@ -26,6 +28,8 @@
             isGameOver = tt.isGameOver;
             isDraw = tt.IsDraw;
             field = tt.field;
+
+            WaitMove = id == tt.Client1.ConnId ? tt.Client1.WaitMove : tt.Client2.WaitMove;
 
             YouWin = id == tt.Client1.ConnId ? tt.WinClient1 : tt.WinClient2;
             OpponentWin = id != tt.Client1.ConnId ? tt.WinClient1 : tt.WinClient2;

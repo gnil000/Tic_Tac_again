@@ -73,6 +73,9 @@ namespace Tic_Tac_again.Models
             {
                 game.Client1.SetIsWin(-1);
                 game.Client2.SetIsWin(-1);
+                //game.StartNewGame();
+                //_games.UpdateTicTacToeState(game);
+
                 //_games.RemoveGame(game);
                 return false;
             }
@@ -84,6 +87,8 @@ namespace Tic_Tac_again.Models
                     game.Client1.SetIsWin(1);
                     game.Client2.SetIsWin(0);
                     game.WinClient1 += 1;
+                    //_games.UpdateTicTacToeState(game);
+
                     //_games.RemoveGame(game);
                     return false;
                 }
@@ -96,6 +101,7 @@ namespace Tic_Tac_again.Models
                     game.Client1.SetIsWin(0);
                     game.WinClient2 += 1;
                     //_games.RemoveGame(game);
+                    //_games.UpdateTicTacToeState(game);
                     return false;
                 }
             }
@@ -106,7 +112,7 @@ namespace Tic_Tac_again.Models
                 player.Opponent.WaitMove = !player.Opponent.WaitMove;
             }
 
-            _games.UpdateTicTacToeState(game);
+           // _games.UpdateTicTacToeState(game);
             //_clients.UpdateClientState(player);
 
             return true;

@@ -37,13 +37,23 @@
         public bool StartGame(int marker, int position)
         {
             if (isGameOver)
+            {
+                StartNewGame();
                 return false;
+            }
 
             SetMarker(marker, position);
 
             return CheckWinner();
         }
 
+        public void StartNewGame() {
+            moves = 9;
+            for (int i = 0; i < 9; i++)
+                field[i] = -1;
+            isGameOver = false;
+            IsDraw = false;
+        }
 
         private bool CheckWinner()
         {
@@ -53,14 +63,16 @@
                     ((field[i * 3] != -1 && field[(i * 3)] == field[(i * 3) + 1] && field[(i * 3)] == field[(i * 3) + 2]) ||
                      (field[i] != -1 && field[i] == field[i + 3] && field[i] == field[i + 6])))
                 {
-                    isGameOver = true;
+                    //isGameOver = true;
+                    StartNewGame();
                     return true;
                 }
             }
 
             if ((field[0] != -1 && field[0] == field[4] && field[0] == field[8]) || (field[2] != -1 && field[2] == field[4] && field[2] == field[6]))
             {
-                isGameOver = true;
+                //isGameOver = true;
+                StartNewGame();
                 return true;
             }
 
