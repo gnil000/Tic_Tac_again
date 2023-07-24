@@ -1,4 +1,6 @@
-﻿namespace Tic_Tac_again.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Tic_Tac_again.Models
 {
     public class TicTacToe
     {
@@ -14,6 +16,8 @@
         public Client Client2 { get; set; }
 
         public int[] field { get; set; }
+        //[JsonIgnore]
+       // public int[] oldField { get; set; }
         //-1 - cell is empty
         //0 - player1
         //1 - player2
@@ -25,8 +29,11 @@
         {
             moves = 9;
             field = new int[9];
+           // oldField = new int[9];
             for(int i = 0; i < 9; i++)
                 field[i] = -1;
+            //for (int i = 0; i < 9; i++)
+              //  oldField[i] = -1;
             isGameOver = false;
             IsDraw = false;
             WinClient1 = 0;
