@@ -7,23 +7,23 @@ namespace Tic_Tac_again.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ClientController : Controller
+    public class ClientsController : Controller
     {
         private readonly ClientService _context;
 
-        public ClientController(ClientService context)
+        public ClientsController(ClientService context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Client>>> Client()
+        public List<Client> Clients()
         {
-            return await _context.GetClients();
+            return _context.GetClients();
         }
 
         [HttpGet ("{id}")]
-        public async Task<ActionResult<Client>> Client(int id)
+        public async Task<ActionResult<Client>> Clients(int id)
         {
             var client =  _context.GetClient(id);
             if (client == null)
@@ -32,12 +32,12 @@ namespace Tic_Tac_again.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Client>> Client([FromBody]Client client)
+        public Client Clients([FromBody]Client client)
         {
-            var result = await _context.AddClient(client);
+            var result =  _context.AddClient(client);
             if (result == null)
                 BadRequest();
-            return await Task.FromResult(result);
+            return result;
         }
     }
 }

@@ -14,8 +14,8 @@
             return DataSource.GetInstance()._games.FirstOrDefault(x => x.Client1.ConnId == id || x.Client2.ConnId==id);
         }
 
-        public async Task<List<TicTacToe>> GetGames() {
-            return await Task.FromResult(DataSource.GetInstance()._games);
+        public List<TicTacToe> GetGames() {
+            return DataSource.GetInstance()._games;
         }
 
         public void UpdateTicTacToeState(TicTacToe game)

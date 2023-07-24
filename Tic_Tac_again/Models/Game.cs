@@ -9,33 +9,20 @@ namespace Tic_Tac_again.Models
         public static bool WaitFirstMove(ClientService _clients, TicTacToeService _games, int id)
         {
             var client = _clients.GetClient(id);
-            var game = _games.GetGames().Result.FirstOrDefault(x => x.Client1.ConnId == id || x.Client2.ConnId == id);
-            //int[] oldField1=new int[9];
-            //for (int i = 0; i < 9; i++)
-            //    oldField1[i] = -1;
-            //int[] oldField = game.field;
-            //object locker = new();
+            var game = _games.GetGames().FirstOrDefault(x => x.Client1.ConnId == id || x.Client2.ConnId == id);
             int[] oldField = new int[9];
             for (int i = 0; i < 9; i++)
                 oldField[i] = game.field[i];
             while (true)
             {
-                //lock (locker)
-                //{
-
                 for (int i = 0; i < 9; i++)
                     if (game.field[i] != oldField[i])
                     {
                         oldField[i] = game.field[i];
                         return true;
                     }
-                    //field[i] = -1;
-                    // game.oldField = game.field;
-
 
                     Task.Delay(1000).Wait();
-                    //Thread.Sleep(1000);
-                //}
             }
             
         }
@@ -52,7 +39,7 @@ namespace Tic_Tac_again.Models
             int i = 0;
             Client? opponent = null;
             while (opponent == null) {
-                opponent = _clients.GetClients().Result.Where(x => x.isPlaying == false && x.isSearchGame == true && x != client).FirstOrDefault();
+                opponent = _clients.GetClients().Where(x => x.isPlaying == false && x.isSearchGame == true && x != client).FirstOrDefault();
                 Task.Delay(1000).Wait();
                 if (i++ == 10)
                 {
@@ -91,22 +78,13 @@ namespace Tic_Tac_again.Models
                     _games.AddGame(new TicTacToe { Client1 = client, Client2 = opponent });
                 }
             }
-            //if (client.WaitMove)
-            //{
-            //    var game = _games.GetGames().Result.FirstOrDefault(x => x.Client1.ConnId == id || x.Client2.ConnId == id);
-            //    var oldField = game.field;
-            //    while (game.field == oldField)
-            //    {
-            //        Task.Delay(1000).Wait();
-            //    }
-            //}
             return true;
         }
 
 
         public static bool Play(ClientService _clients, TicTacToeService _games, int clientId, int position)
         {
-            var game = _games.GetGames().Result.FirstOrDefault(x => x.Client1.ConnId == clientId || x.Client2.ConnId == clientId);
+            var game = _games.GetGames().FirstOrDefault(x => x.Client1.ConnId == clientId || x.Client2.ConnId == clientId);
 
             var player = _clients.GetClient(clientId);
 
@@ -114,10 +92,6 @@ namespace Tic_Tac_again.Models
             {
                 game.Client1.SetIsWin(-1);
                 game.Client2.SetIsWin(-1);
-                //game.StartNewGame();
-                //_games.UpdateTicTacToeState(game);
-
-                //_games.RemoveGame(game);
                 return false;
             }
 
@@ -128,9 +102,6 @@ namespace Tic_Tac_again.Models
                     game.Client1.SetIsWin(1);
                     game.Client2.SetIsWin(0);
                     game.WinClient1 += 1;
-                    //_games.UpdateTicTacToeState(game);
-
-                    //_games.RemoveGame(game);
                     return false;
                 }
             }
@@ -141,8 +112,6 @@ namespace Tic_Tac_again.Models
                     game.Client2.SetIsWin(1);
                     game.Client1.SetIsWin(0);
                     game.WinClient2 += 1;
-                    //_games.RemoveGame(game);
-                    //_games.UpdateTicTacToeState(game);
                     return false;
                 }
             }
@@ -153,31 +122,6 @@ namespace Tic_Tac_again.Models
                 player.Opponent.WaitMove = !player.Opponent.WaitMove;
             }
 
-            // _games.UpdateTicTacToeState(game);
-            //_clients.UpdateClientState(player);
-            //var oldField = game.field;
-            //game.oldField = game.field;
-            //object locker = new();
-            //int[] oldField = new int[9];
-            //for (int i = 0; i < 9; i++)
-            //    oldField[i] = game.field[i];
-            //while (true)
-            //{
-            //    //lock (locker)
-            //    //{
-            //    for (int i = 0; i < 9; i++)
-            //        if (game.field[i] != oldField[i])
-            //        {
-            //            oldField[i] = game.field[i];
-            //            return true;
-            //        }
-
-            //    Task.Delay(1000).Wait();
-            //        //Thread.Sleep(1000);
-            //    //}
-
-            //    //return true;
-            //}
             return WaitFirstMove(_clients, _games,clientId);
         }
 

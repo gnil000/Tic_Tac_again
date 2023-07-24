@@ -26,10 +26,8 @@ namespace Tic_Tac_again.Controllers
         [HttpGet]
         [Route("GetField")]
         public GameStateStruct GetField(int id)
-        { //id client 
+        {
             Game.WaitFirstMove(_clientContext, _tictactoeContext, id);
-           
-           // Game.WaitFirstMove(_clientContext, _tictactoeContext, id);
             var tictac = _tictactoeContext.GetGame(id);
             return new GameStateStruct(tictac, id);
         }
