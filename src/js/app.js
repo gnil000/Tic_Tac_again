@@ -101,8 +101,8 @@ function MakeMove(i) {
     })
         .then(data => data.json())
         .then(json => {
-        player.countWin = json.youWin;
-        player.countWinOpponent = json.opponentWin;
+        player.countWin = json.youWinCounter;
+        player.countWinOpponent = json.opponentWinCounter;
         player.waitMove = json.waitMove;
         player.gameState = json.isWin;
         oldMatrix = json.field;
@@ -142,13 +142,13 @@ function Registration(name) {
 //+++++++++++++++++++++++++++++++++++++++
 function RequestGameField() {
     console.log('Request send to server');
-    fetch('https://localhost:7025/Game/GetField?id=' + player.id.toString(), {
+    fetch('https://localhost:7025/Game/WaitFirstMove?id=' + player.id.toString(), {
         method: 'GET'
     })
         .then(data => data.json())
         .then(json => {
-        player.countWin = json.youWin;
-        player.countWinOpponent = json.opponentWin;
+        player.countWin = json.youWinCounter;
+        player.countWinOpponent = json.opponentWinCounter;
         player.waitMove = json.waitMove;
         player.gameState = json.isWin;
         oldMatrix = json.field;
@@ -164,7 +164,7 @@ function GetGameField() {
             messageScore.innerHTML = `Score: X - ${player.countWinOpponent}, O - ${player.countWin}`;
         }
         if (player.waitMove == false) {
-            messageTurn.innerHTML = 'Youre turn!';
+            messageTurn.innerHTML = 'Your turn!';
         }
         else if (player.waitMove == true) {
             messageTurn.innerHTML = `${player.opponentName} turn!`;
