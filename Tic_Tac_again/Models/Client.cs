@@ -25,7 +25,10 @@ namespace Tic_Tac_again.Models
         {
             Name = name;
             isPlaying = false;
-            ConnId = DataSource.GetInstance()._clients.Count+1;
+            if (DataSource.GetInstance()._clients.Count==0)
+                ConnId = DataSource.GetInstance()._clients.Count+1;
+            else
+                ConnId = DataSource.GetInstance()._clients.Max(x=> x.ConnId)+1;
             isWin = -2;
             isSearchGame = false;
         } 

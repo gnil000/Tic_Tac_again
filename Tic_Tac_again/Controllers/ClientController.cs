@@ -16,27 +16,41 @@ namespace Tic_Tac_again.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Предназначен для получения списка всех клиентов.
+        /// </summary>
+        /// <returns>Возвращает список всех зарегестрированных клиентов с полной информацией.</returns>
         [HttpGet]
         public List<Client> Clients()
         {
             return _context.GetClients();
         }
 
+        /// <summary>
+        /// Предназначен для получения клиента по айди
+        /// </summary>
+        /// <param name="id">Айди клиента который вы получаете после регистрации</param>
+        /// <returns>Возвращает объект клиента</returns>
         [HttpGet ("{id}")]
-        public async Task<ActionResult<Client>> Clients(int id)
+        public Client? Clients(int id)
         {
             var client =  _context.GetClient(id);
             if (client == null)
-                return NotFound();
-            return await Task.FromResult(client);
+                return null;
+            return client;
         }
 
+        /// <summary>
+        /// Метод для регистрации клиента.
+        /// </summary>
+        /// <param name="client">Вы должны отправить только имя</param>
+        /// <returns>Возвращает объект клиента</returns>
         [HttpPost]
-        public Client Clients([FromBody]Client client)
+        public Client? Clients([FromBody]Client client)
         {
             var result =  _context.AddClient(client);
             if (result == null)
-                BadRequest();
+                return null;
             return result;
         }
     }

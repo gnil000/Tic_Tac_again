@@ -6,9 +6,8 @@
 
         public string opponentName { get; set; }
 
-        public int YouWin { get; set; }
-        public int OpponentWin { get; set; }
-        //public string client2Name { get; set; }
+        public int YouWinCounter { get; set; }
+        public int OpponentWinCounter { get; set; }
 
         public int isWin { get; set; }
 
@@ -35,9 +34,8 @@
 
             WaitMove = id == tt.Client1.ConnId ? tt.Client1.WaitMove : tt.Client2.WaitMove;
 
-            YouWin = id == tt.Client1.ConnId ? tt.WinClient1 : tt.WinClient2;
-            OpponentWin = id != tt.Client1.ConnId ? tt.WinClient1 : tt.WinClient2;
+            YouWinCounter = id == tt.Client1.ConnId ? tt.WinClient1 : tt.WinClient2;
+            OpponentWinCounter = id != tt.Client1.ConnId ? tt.WinClient1 : tt.WinClient2;
         }
-
     }
 }

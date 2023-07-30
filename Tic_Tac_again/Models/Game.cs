@@ -5,7 +5,13 @@ namespace Tic_Tac_again.Models
 {
     public static class Game
     {
-
+        /// <summary>
+        /// Метод для ожидания изменений в игровой сессии и отправке этих изменений если они случатся.
+        /// </summary>
+        /// <param name="_clients"></param>
+        /// <param name="_games"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static bool WaitFirstMove(ClientService _clients, TicTacToeService _games, int id)
         {
             var client = _clients.GetClient(id);
@@ -21,12 +27,17 @@ namespace Tic_Tac_again.Models
                         oldField[i] = game.field[i];
                         return true;
                     }
-
                     Task.Delay(1000).Wait();
             }
-            
         }
 
+        /// <summary>
+        /// Метод для поиска противника
+        /// </summary>
+        /// <param name="_clients">объект для управления списком игроков</param>
+        /// <param name="_games">объект для управления списком игр</param>
+        /// <param name="id">айди клиента</param>
+        /// <returns>true = всё удачно прошло, false = что-то пошло не так на каком-то из этапов</returns>
         public static bool FindOpponent(ClientService _clients, TicTacToeService _games, int id)
         {
             Random random = new Random();
@@ -81,12 +92,22 @@ namespace Tic_Tac_again.Models
             return true;
         }
 
-
+        /// <summary>
+        /// Метод для совершения хода.
+        /// </summary>
+        /// <param name="_clients"></param>
+        /// <param name="_games"></param>
+        /// <param name="clientId"></param>
+        /// <param name="position">позиция от 0 до 8</param>
+        /// <returns>true = всё удачно прошло, false = что-то пошло не так на каком-то из этапов</returns>
         public static bool Play(ClientService _clients, TicTacToeService _games, int clientId, int position)
         {
             var game = _games.GetGames().FirstOrDefault(x => x.Client1.ConnId == clientId || x.Client2.ConnId == clientId);
 
             var player = _clients.GetClient(clientId);
+
+            if (player.WaitMove == true) //если запрос отправил игрок который не должен сейчас ходить
+                return false;
 
             if (game.isGameOver && game.IsDraw)
             {
@@ -122,9 +143,15 @@ namespace Tic_Tac_again.Models
                 player.Opponent.WaitMove = !player.Opponent.WaitMove;
             }
 
-            return WaitFirstMove(_clients, _games,clientId);
+            return WaitFirstMove(_clients, _games,clientId);//для ожидания хода второго игрока
         }
 
+        /// <summary>
+        /// Метод для разрыва соединения с клиентом, удаления его из списка игроков и удаления его существующей игры из списка активных игр
+        /// </summary>
+        /// <param name="_clients"></param>
+        /// <param name="_games"></param>
+        /// <param name="id"></param>
         public static void PlayerDisconnected(ClientService _clients, TicTacToeService _games, int id)
             {
                 var game = _games.GetGame(id);
